@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import DrawerAppBar from "../component/navbar";
 import { Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -8,12 +8,13 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
-import {useDispatch} from 'react-redux';
-import {addBillData} from '../redux/actions';
-import {useNavigate} from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux';
+import {addBillData, updateBillData} from '../redux/actions';
+import {useNavigate,useParams} from 'react-router-dom';
+import {getSingleBill} from '../redux/actions';
 // make a form to add a bill
-const AddBill = () => {
-  const [bill, setBill] = useState({
+const UpdateBill = () => {
+  const [state, setState] = useState({
     description: "",
     amount: 0,
     category: "",
@@ -21,25 +22,41 @@ const AddBill = () => {
   });
   let dispatch = useDispatch();
   let navigate = useNavigate();
-  const { description, amount, category, date } = bill;
+  let { bill } = useSelector((state) => state.data);
+  let {id} = useParams();
+
+  useEffect(()=>{
+    dispatch(getSingleBill(id));
+  },[])
+ console.log(bill);
+   let tempdate = bill.date;
+    let dateArray = tempdate.split("-");
+    let newDate = dateArray[2] + "-" + dateArray[0] + "-" + dateArray[1];
+   bill.date = newDate;
+  useEffect(()=>{
+    setState(bill);
+  }
+    ,[bill])
+
+  const { description, amount, category, date } = state;
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setBill({ ...bill, [e.target.name]: e.target.value });
+    setState({ ...state, [e.target.name]: e.target.value });
   };
   const handleSubmit = (e) => {
-    console.log(bill);
+    //console.log(bill);
     e.preventDefault();
     
     if(description===""||amount===0||category===""||date===""){
       setError("Please fill all the fields");
     }
     else{
-      let date =bill.date;
+      let date =state.date;
       let dateArray = date.split("-");
       let newDate = dateArray[1] + "-" + dateArray[2] + "-" + dateArray[0];
-      bill.date = newDate;
-      dispatch(addBillData(bill));
+      state.date = newDate;
+      dispatch(updateBillData(id,state));
       setError("");
       navigate("/");
       
@@ -58,7 +75,7 @@ const AddBill = () => {
           height: "100vh",
         }}
       >
-        <h2>Add New Bill</h2>
+        <h2>Update Bill</h2>
         <Box
           component="form"
           sx={{
@@ -118,4 +135,4 @@ const AddBill = () => {
   );
 };
 
-export default AddBill;
+export default UpdateBill;

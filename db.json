@@ -1,6 +1,20 @@
 {
   "bills": [
     {
+      "id": 1,
+      "description": "Dominoes",
+      "category": "FoodNDining",
+      "amount": "430",
+      "date": "01-02-2020"
+    },
+    {
+      "id": 2,
+      "description": "Car wash day",
+      "category": "utility",
+      "amount": "500",
+      "date": "01-06-2020"
+    },
+    {
       "id": 3,
       "description": "Amazon",
       "category": "shopping",
@@ -13,13 +27,6 @@
       "category": "Food & Dining",
       "amount": "35900",
       "date": "01-03-2020"
-    },
-    {
-      "id": 5,
-      "description": "Tuition",
-      "category": "education",
-      "amount": "2200",
-      "date": "01-12-2020"
     },
     {
       "id": 6,

@@ -8,13 +8,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {Line} from 'react-chartjs-2';
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import AddIcon from "@mui/icons-material/Add";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import DrawerAppBar from '../component/navbar';
 
 import Button from "@mui/material/Button";
 import {
@@ -24,7 +24,7 @@ import {
 } from "../redux/actions";
 
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, hexToRgb } from "@mui/material";
+import { Box, Grid, hexToRgb } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,26 +46,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-
-
 const Home = () => {
-  let navigate=useNavigate();
+  let navigate = useNavigate();
   let dispatch = useDispatch();
   let { bills } = useSelector((state) => state.data);
   let totalAmount = 0;
-  let monthMap = new Map();
+
+
   bills.map((bill) => {
-    let date = bill.date;
     totalAmount += parseInt(bill.amount);
-    let month = date.split("-")[0];
-    if (monthMap.has(month)) {
-      monthMap.set(
-        month,
-        parseInt(monthMap.get(month)) + parseInt(bill.amount)
-      );
-    } else {
-      monthMap.set(month, bill.amount);
-    }
   });
   useEffect(() => {
     dispatch(loadBillData());
@@ -74,6 +63,7 @@ const Home = () => {
   const handleDelete = (id) => {
     console.log(id);
     if (window.confirm("Are you sure you want to delete this bill?")) {
+      setCategory("All Categories");
       dispatch(deleteBillData(id));
     }
   };
@@ -88,14 +78,13 @@ const Home = () => {
   };
   return (
     <div>
-      <h1>Bill Tracker</h1>
-      
-        
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <DrawerAppBar/>
+     <Box  component="main" sx={{ p: 10 }}>
+      <TableContainer sx={{ maxHeight: 460 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
-              <StyledTableCell>Decription</StyledTableCell>
+              <StyledTableCell>Description</StyledTableCell>
               <StyledTableCell align="center">
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
@@ -140,7 +129,8 @@ const Home = () => {
                     variant="contained"
                     aria-label="outlined primary button group"
                   >
-                    <Button>Edit</Button>
+                    <Button  onClick={() => navigate("/updatebill/" + bill.id)}>
+                      Edit</Button>
                     <Button
                       variant="outlined"
                       startIcon={<DeleteIcon />}
@@ -155,22 +145,25 @@ const Home = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      </Box>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <h1>Total Amount: {totalAmount}</h1>
+          <h2>Total Amount: {totalAmount}</h2>
         </Grid>
         <Grid item xs={6}>
-        <div>
-        <div id="test">
-          { <span>&nbsp;&nbsp;</span>}
-        </div>
-        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={()=>navigate('/addBill')}>
-            Add Bill
-        </Button>
-        </div>
-       
+          <div>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={() => navigate("/addBill")}
+            >
+              Add Bill
+            </Button>
+          </div>
         </Grid>
       </Grid>
+     
     </div>
   );
 };

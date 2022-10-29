@@ -10,6 +10,19 @@ const deleteBill = () => ({
     type: types.DELETE_BILL,
 });
 
+const addBill = (bill) => ({
+    type: types.ADD_BILL,
+});
+
+const singleBill = (bill) => ({
+    type: types.GET_SINGLE_BILL,
+    payload: bill
+});
+
+const updateBill = () => ({
+    type: types.UPDATE_BILL,
+});
+
 export const loadBillData = () => {
     return (dispatch) => {
         return axios.get('http://localhost:3001/bills')
@@ -52,84 +65,45 @@ export const deleteBillData = (id) => {
             });
     };
 };
-// export const loadBillData = () => {
-//     return {
-//         type: types.LOAD_BILL_DATA
-//     };
-//     };
 
-// export const loadBillDataSuccess = (data) => {
-//     return {
-//         type: types.LOAD_BILL_DATA_SUCCESS,
-//         payload: data
-//     };
-// }
+export const addBillData = (bill) => {
+    return (dispatch) => {
+        return axios.post('http://localhost:3001/bills', bill)
+            .then(response => {
+                console.log(response.data);
+                dispatch(addBill());
+            })
+            .catch(error => {
+                 console.log(error);
+                throw (error);
+            });
+    };
+}
 
-// export const loadBillDataFailure = (error) => {
-//     return {
-//         type: types.LOAD_BILL_DATA_FAILURE,
-//         payload: error
-//     };
-// }
+export const getSingleBill = (id) => {
+    return (dispatch) => {
+        return axios.get('http://localhost:3001/bills/' + id)
+            .then(response => {
+                console.log(response.data);
+                dispatch(singleBill(response.data));
+            })
+            .catch(error => {
+                 console.log(error);
+                throw (error);
+            });
+    };
+}
 
-// export const createBillStart = (bill) => {
-//     return {
-//         type: types.CREATE_BILL_START,
-//         payload: bill
-//     };
-// }
-
-// export const createBillSuccess = (bill) => {
-//     return {
-//         type: types.CREATE_BILL_SUCCESS,
-//         payload: bill
-//     };
-// }
-
-// export const createBillFailure = (error) => {
-//     return {
-//         type: types.CREATE_BILL_FAILURE,
-//         payload: error
-//     };
-// }
-
-// export const updateBillStart = (bill) => {
-//     return {
-//         type: types.UPDATE_BILL_START,
-//         payload: bill
-//     };
-// }
-
-// export const updateBillSuccess = () => {
-//     return {
-//         type: types.UPDATE_BILL_SUCCESS
-//     };
-// }
-
-// export const updateBillFailure = (error) => {
-//     return {
-//         type: types.UPDATE_BILL_FAILURE,
-//         payload: error
-//     };
-// }
-
-// export const deleteBillStart = (id) => {
-//     return {
-//         type: types.DELETE_BILL_START,
-//         payload: id
-//     };
-// }
-
-// export const deleteBillSuccess = (id) => {
-//     return {
-//         type: types.DELETE_BILL_SUCCESS,
-//         payload: id
-//     };
-// }
-
-// export const deleteBillFailure = (error) => {
-//     return {
-//         type: types.DELETE_BILL_FAILURE,
-//         payload: error
-//     };
-// }
+export const updateBillData = (id,bill) => {
+    return (dispatch) => {
+        return axios.put('http://localhost:3001/bills/' +id, bill)
+            .then(response => {
+                console.log(response.data);
+                dispatch(updateBill());
+            })
+            .catch(error => {
+                 console.log(error);
+                throw (error);
+            });
+    };
+}

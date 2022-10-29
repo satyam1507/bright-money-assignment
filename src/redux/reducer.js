@@ -21,47 +21,22 @@ const billReducer = (state = initialState, action) => {
                 ...state,
                 loading: false
             };
-        // case types.LOAD_BILL_DATA_SUCCESS:
-        //     return {
-        //         ...state,
-        //         bills: action.payload,
-        //         loading: false
-        //     };
-        // case types.LOAD_BILL_DATA_FAILURE:
-        //     return {
-        //         ...state,
-        //         loading: false
-        //     };
-        // case types.CREATE_BILL_START:
-        //     return {
-        //         ...state,
-        //         loading: true
-        //     };
-        // case types.CREATE_BILL_SUCCESS:
-        //     return {
-        //         ...state,
-        //         loading: false
-        //     };
-        // case types.CREATE_BILL_FAILURE:
-        //     return {
-        //         ...state,
-        //         loading: false
-        //     };
-        // case types.UPDATE_BILL_START:
-        //     return {
-        //         ...state,
-        //         loading: true
-        //     };
-        // case types.UPDATE_BILL_SUCCESS:
-        //     return {
-        //         ...state,
-        //         loading: false
-        //     };
-        // case types.UPDATE_BILL_FAILURE:
-        //     return {
-        //         ...state,
-        //         loading: false
-        //     };
+        case types.ADD_BILL:
+            return {
+                ...state,
+                loading: false
+            };
+        case types.GET_SINGLE_BILL:
+            return {
+                ...state,
+                bill: action.payload,
+                loading: false
+            };
+        case types.UPDATE_BILL:
+            return {
+                ...state,
+                loading: false
+            };
         default:
             return state;
     }
